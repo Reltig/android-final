@@ -4,37 +4,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.finalapp.data.repository.interfaces.IShopRepository
 import com.example.finalapp.model.Product
 import com.example.finalapp.state.ShopState
+import com.example.finalapp.utils.launchLoadingAndError
 
 class ShopViewModel(
-
+    private val repository: IShopRepository
 ) : ViewModel()
 {
     private val mutableState = MutableListState()
     val viewState = mutableState as ShopState
 
     init {
-        mutableState.items = listOf(
-            Product(
-                name = "String",
-                description = "String",
-                iconUrl = "String",
-                price = 100,
-                rating = 5f,
-                ratingsCount = 1,
-                commentsCount = 1
-            ),
-            Product(
-                name = "String2",
-                description = "String2",
-                iconUrl = "String2",
-                price = 200,
-                rating = 4.5f,
-                ratingsCount = 2,
-                commentsCount = 2
-            )
-        )
+        loadProducts()
+    }
+
+    private fun loadProducts() {
+        viewModelScope.launchLoadingAndError(
+            handleError = { mutableState.error = it.localizedMessage },
+            updateLoading = { mutableState.loading = it }
+        ) {
+            mutableState.items = emptyList()
+            mutableState.error = null
+
+            mutableState.items = repository.getProducts()
+        }
     }
 
     private class MutableListState : ShopState {

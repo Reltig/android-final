@@ -1,6 +1,7 @@
 package com.example.finalapp
 
 import android.app.Application
+import com.example.finalapp.di.networkModule
 import com.example.finalapp.di.rootModule
 import com.github.terrakok.modo.ModoDevOptions
 import logcat.AndroidLogcatLogger
@@ -26,7 +27,7 @@ class FinalApp : Application() {
         startKoin {
             androidLogger()
             androidContext(this@FinalApp)
-            modules(rootModule)
+            modules(rootModule, networkModule)
         }
     }
 }
