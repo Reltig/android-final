@@ -1,5 +1,6 @@
 package com.example.finalapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,6 +39,7 @@ import com.github.terrakok.modo.stack.forward
 import kotlinx.parcelize.Parcelize
 import org.koin.androidx.compose.koinViewModel
 import com.example.finalapp.ui.theme.Typography
+import org.koin.compose.getKoin
 
 @Parcelize
 class ShopScreen(
@@ -48,7 +50,7 @@ class ShopScreen(
     @Composable
     override fun Content(modifier: Modifier) {
         val navigation = LocalStackNavigation.current
-        val viewModel = koinViewModel<ShopViewModel>()
+        val viewModel = getKoin().get<ShopViewModel>()
         val state = viewModel.viewState
 
         Column(Modifier.fillMaxSize()) {
@@ -81,7 +83,7 @@ class ShopScreen(
                 lazyColumnState
             ) {
                 items(state.items) {
-                    ProductListElement(it, navigation)
+                    ProductListElement(it, viewModel, navigation)
                 }
             }
         }
@@ -91,11 +93,12 @@ class ShopScreen(
 @Composable
 fun ProductListElement (
     product: Product,
+    viewModel: ShopViewModel,
     navigation: StackNavContainer? = null,
 ) {
     Row(Modifier
         .fillMaxWidth()
-        .clickable { navigation?.forward(ProductScreen(product)) }
+        .clickable { navigation?.forward(ProductScreen(product, { viewModel.addToCart(product.id)})) }
         .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Box(

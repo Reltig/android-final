@@ -1,9 +1,12 @@
 package com.example.finalapp.mocks.api
 
+import android.util.Log
 import com.example.finalapp.data.api.IShopApi
 import com.example.finalapp.data.model.response.ProductListResponse
 import com.example.finalapp.data.model.response.ProductResponse
 import com.example.finalapp.model.Product
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MockShopApi: IShopApi {
     private val db = listOf(
@@ -42,24 +45,31 @@ class MockShopApi: IShopApi {
     private val cart = mutableListOf<ProductResponse>()
 
     override suspend fun getProducts(limit: Int): ProductListResponse {
-        return ProductListResponse(data = db)
+        return withContext(Dispatchers.IO) {
+            ProductListResponse(data = db)
+        }
     }
 
     override suspend fun getProduct(id: Int): ProductResponse? {
-        return db.find{it.id == id}
+        return withContext(Dispatchers.IO) {
+            db.find { it.id == id }
+        }
     }
 
     override suspend fun addProductToCart(id: Int) {
-        val product = db.find{it.id == id}
-        if (product == null)
-            return
-        if(cart.find{it.id == id} == null)
-            return
-        cart.add(product)
-
+        return withContext(Dispatchers.IO) {
+            val product = db.find{it.id == id}
+            if (product == null)
+                return@withContext
+            if(cart.find{it.id == id} != null)
+                return@withContext
+            cart.add(product)
+        }
     }
 
     override suspend fun getProductsInCart(): ProductListResponse {
-        return ProductListResponse(data = cart)
+        return withContext(Dispatchers.IO) {
+            ProductListResponse(data = cart)
+        }
     }
 }

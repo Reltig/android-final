@@ -8,22 +8,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalapp.data.repository.interfaces.IShopRepository
 import com.example.finalapp.model.Product
-import com.example.finalapp.state.ShopState
+import com.example.finalapp.state.CartState
 import com.example.finalapp.utils.launchLoadingAndError
-import kotlinx.coroutines.launch
 
-class ShopViewModel(
+
+class CartViewModel(
     private val repository: IShopRepository
 ) : ViewModel(), IUpdatableViewModel
 {
     private val mutableState = MutableListState()
-    val viewState = mutableState as ShopState
+    val viewState = mutableState as CartState
 
     init {
-        loadProducts()
+        loadCart()
     }
 
-    private fun loadProducts() {
+    private fun loadCart() {
         viewModelScope.launchLoadingAndError(
             handleError = { mutableState.error = it.localizedMessage },
             updateLoading = { mutableState.loading = it }
@@ -31,21 +31,15 @@ class ShopViewModel(
             mutableState.items = emptyList()
             mutableState.error = null
 
-            mutableState.items = repository.getProducts()
-        }
-    }
-
-    fun addToCart(id: Int) {
-        viewModelScope.launch {
-            repository.addProductToCart(id)
+            mutableState.items = repository.getProductsInCart()
         }
     }
 
     override fun update() {
-        loadProducts()
+        loadCart()
     }
 
-    private class MutableListState : ShopState {
+    private class MutableListState : CartState {
         override var items: List<Product> by mutableStateOf(emptyList())
         override var error: String? by mutableStateOf(null)
         override var loading: Boolean by mutableStateOf(false)

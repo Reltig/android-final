@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,10 +21,12 @@ import com.github.terrakok.modo.ScreenKey
 import com.github.terrakok.modo.generateScreenKey
 import kotlinx.parcelize.Parcelize
 import com.example.finalapp.ui.theme.Typography
+import com.example.finalapp.viewModel.ShopViewModel
 
 @Parcelize
 class ProductScreen(
     private val product: Product,
+    private val addToCart: () -> Unit,
     override val screenKey: ScreenKey = generateScreenKey()
 ) : Screen {
 
@@ -49,6 +52,9 @@ class ProductScreen(
                     .weight(1f)
                     .padding(start = 16.dp)
             )
+            Button(onClick = addToCart) {
+                Text(text = "Add to cart")
+            }
         }
     }
 }
