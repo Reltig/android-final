@@ -29,6 +29,7 @@ import com.example.finalapp.viewModel.ShopViewModel
 class ProductScreen(
     private val product: Product,
     private val addToCart: () -> Unit,
+    private val addToFavourite: () -> Unit,
     override val screenKey: ScreenKey = generateScreenKey()
 ) : Screen {
 
@@ -56,6 +57,9 @@ class ProductScreen(
                 )
                 Button(onClick = addToCart) {
                     Text(text = "Add to cart")
+                }
+                Button(onClick = addToFavourite) {
+                    Text(text = "Add to favourite")
                 }
             }
             Text(

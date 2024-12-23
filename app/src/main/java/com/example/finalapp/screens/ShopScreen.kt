@@ -99,7 +99,12 @@ fun ProductListElement (
 ) {
     Row(Modifier
         .fillMaxWidth()
-        .clickable { navigation?.forward(ProductScreen(product, { viewModel.addToCart(product.id)})) }
+        .clickable { navigation?.forward(ProductScreen(
+                product,
+                { viewModel.addToCart(product.id) },
+                { viewModel.addToFavourite(product) })
+            )
+        }
         .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically) {
         AsyncImage(

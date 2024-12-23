@@ -2,11 +2,13 @@ package com.example.finalapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.finalapp.data.dao.FavouritesDao
 import com.example.finalapp.data.db.FavouriteDatabase
 import org.koin.dsl.module
+import org.koin.android.ext.koin.androidContext
 
 val dbModule = module {
-    single { DatabaseBuilder.getInstance(get()) }
+    single { DatabaseBuilder.provideFavouriteDb(androidContext()) }
 }
 
 object DatabaseBuilder {
@@ -27,4 +29,9 @@ object DatabaseBuilder {
             FavouriteDatabase::class.java,
             "favourite-v1"
         ).build()
+
+    fun provideFavouriteDb(applicationContext: Context): FavouritesDao {
+        val db = getInstance(applicationContext)
+        return db.favouritesDao()
+    }
 }

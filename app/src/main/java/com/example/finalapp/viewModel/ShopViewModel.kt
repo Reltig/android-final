@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.finalapp.data.dao.FavouritesDao
+import com.example.finalapp.data.model.dbEntity.FavouriteProductDbEntity
 import com.example.finalapp.data.repository.interfaces.IShopRepository
 import com.example.finalapp.model.Product
 import com.example.finalapp.state.ShopState
@@ -13,7 +15,8 @@ import com.example.finalapp.utils.launchLoadingAndError
 import kotlinx.coroutines.launch
 
 class ShopViewModel(
-    private val repository: IShopRepository
+    private val repository: IShopRepository,
+    private val favouritesDao: FavouritesDao
 ) : ViewModel()
 {
     private val mutableState = MutableListState()
@@ -38,6 +41,21 @@ class ShopViewModel(
     fun addToCart(id: Int) {
         viewModelScope.launch {
             repository.addProductToCart(id)
+        }
+    }
+
+    fun addToFavourite(product: Product) {
+        viewModelScope.launch {
+            favouritesDao.insert(FavouriteProductDbEntity(
+                id = product.id,
+                name = product.name,
+                description = product.description,
+                iconUrl = product.iconUrl,
+                commentsCount = product.commentsCount,
+                price = product.price,
+                ratingsCount = product.ratingsCount,
+                rating = product.rating
+            ))
         }
     }
 

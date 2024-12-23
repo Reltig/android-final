@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -29,6 +31,28 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            val privateProperties = Properties()
+            privateProperties.load(project.rootProject.file("app/secret.properties").reader())
+            val apiKey: String = privateProperties.getProperty("API_KEY")
+
+            val publicProperties = Properties()
+            publicProperties.load(project.rootProject.file("app/common.properties").reader())
+            val apiUrl: String = publicProperties.getProperty("API_URL")
+
+            buildConfigField("String", "API_URL", "\"${apiUrl}\"")
+            buildConfigField("String", "API_KEY", "\"${apiKey}\"")
+        }
+        debug {
+            val privateProperties = Properties()
+            privateProperties.load(project.rootProject.file("app/secret.properties").reader())
+            val apiKey: String = privateProperties.getProperty("API_KEY")
+
+            val publicProperties = Properties()
+            publicProperties.load(project.rootProject.file("app/common.properties").reader())
+            val apiUrl: String = publicProperties.getProperty("API_URL")
+
+            buildConfigField("String", "API_URL", "\"${apiUrl}\"")
+            buildConfigField("String", "API_KEY", "\"${apiKey}\"")
         }
     }
     compileOptions {
@@ -40,6 +64,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -75,6 +100,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.logging.interceptor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

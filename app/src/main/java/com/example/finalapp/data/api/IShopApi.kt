@@ -9,19 +9,19 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface IShopApi {
-    @GET("products")
+    @GET("api/products")
     suspend fun getProducts(
         @Query("limit") limit: Int = 10
     ): ProductListResponse
 
-    @GET("products/{id}")
+    @GET("api/products/{id}")
     suspend fun getProduct(@Path("id") id: Int): ProductResponse?
 
-    @POST("cart/add/{id}")
+    @POST("api/cart/add/{id}")
     suspend fun addProductToCart(
         @Path("id") id: Int,
     )
 
-    @GET("cart")
+    @GET("api/cart")
     suspend fun getProductsInCart(): CartProductListResponse
 }
