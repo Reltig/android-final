@@ -2,6 +2,8 @@ package com.example.finalapp.mocks.api
 
 import android.util.Log
 import com.example.finalapp.data.api.IShopApi
+import com.example.finalapp.data.model.response.CartProductListResponse
+import com.example.finalapp.data.model.response.CartProductResponse
 import com.example.finalapp.data.model.response.ProductListResponse
 import com.example.finalapp.data.model.response.ProductResponse
 import com.example.finalapp.model.Product
@@ -14,7 +16,7 @@ class MockShopApi: IShopApi {
             id = 0,
             name = "String",
             description = "String",
-            iconUrl = "String",
+            iconUrl = "https://placehold.co/400x400/F00/0FF/png",
             price = 100,
             rating = 5f,
             ratingsCount = 1,
@@ -24,7 +26,7 @@ class MockShopApi: IShopApi {
             id = 1,
             name = "String2",
             description = "String2",
-            iconUrl = "String2",
+            iconUrl = "https://placehold.co/400x400/FF0/00F/png",
             price = 200,
             rating = 4.5f,
             ratingsCount = 2,
@@ -34,7 +36,7 @@ class MockShopApi: IShopApi {
             id = 2,
             name = "String3",
             description = "String3",
-            iconUrl = "String3",
+            iconUrl = "https://placehold.co/400x400/F0F/FFF/png",
             price = 300,
             rating = 5.5f,
             ratingsCount = 3,
@@ -42,7 +44,7 @@ class MockShopApi: IShopApi {
         )
     )
 
-    private val cart = mutableListOf<ProductResponse>()
+    private val cart = mutableListOf<CartProductResponse>()
 
     override suspend fun getProducts(limit: Int): ProductListResponse {
         return withContext(Dispatchers.IO) {
@@ -63,13 +65,23 @@ class MockShopApi: IShopApi {
                 return@withContext
             if(cart.find{it.id == id} != null)
                 return@withContext
-            cart.add(product)
+            cart.add(CartProductResponse(
+                id = product.id,
+                name = product.name,
+                description = product.description,
+                iconUrl = product.iconUrl,
+                commentsCount = product.commentsCount,
+                price = product.price,
+                ratingsCount = product.ratingsCount,
+                rating = product.rating,
+                count = 1
+            ))
         }
     }
 
-    override suspend fun getProductsInCart(): ProductListResponse {
+    override suspend fun getProductsInCart(): CartProductListResponse {
         return withContext(Dispatchers.IO) {
-            ProductListResponse(data = cart)
+            CartProductListResponse(data = cart)
         }
     }
 }

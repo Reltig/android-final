@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ShopViewModel(
     private val repository: IShopRepository
-) : ViewModel(), IUpdatableViewModel
+) : ViewModel()
 {
     private val mutableState = MutableListState()
     val viewState = mutableState as ShopState
@@ -39,10 +39,6 @@ class ShopViewModel(
         viewModelScope.launch {
             repository.addProductToCart(id)
         }
-    }
-
-    override fun update() {
-        loadProducts()
     }
 
     private class MutableListState : ShopState {

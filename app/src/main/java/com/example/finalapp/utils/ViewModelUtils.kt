@@ -8,7 +8,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModel
 import com.example.finalapp.viewModel.CartViewModel
 import org.koin.androidx.compose.koinViewModel
-import com.example.finalapp.viewModel.IUpdatableViewModel
 
 /*
 object ViewModelUtils {

@@ -3,6 +3,7 @@ package com.example.finalapp.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.example.finalapp.model.Product
 import com.github.terrakok.modo.Screen
 import com.github.terrakok.modo.ScreenKey
@@ -32,29 +34,34 @@ class ProductScreen(
 
     @Composable
     override fun Content(modifier: Modifier) {
-        Row(Modifier
+        Column(
+            modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            Box(
+            .padding(16.dp)
+        ) {
+            AsyncImage(
+                model = product.iconUrl,
+                contentDescription = "Product image",
                 modifier = Modifier
-                    .size(24.dp)
-                    .background(Color.Unspecified, CircleShape)
-                    .border(1.dp, Color.Black, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = product.name, style = Typography.titleMedium)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = product.description,
+                    style = Typography.titleMedium,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 16.dp)
+                )
+                Button(onClick = addToCart) {
+                    Text(text = "Add to cart")
+                }
             }
             Text(
                 text = product.description,
-                style = Typography.titleMedium,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp)
+                style = Typography.bodySmall
             )
-            Button(onClick = addToCart) {
-                Text(text = "Add to cart")
-            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.finalapp.data.repository
 import com.example.finalapp.data.api.IShopApi
 import com.example.finalapp.data.mapper.ShopResponseMapper
 import com.example.finalapp.data.repository.interfaces.IShopRepository
+import com.example.finalapp.model.CartProduct
 import com.example.finalapp.model.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,9 +30,9 @@ class ShopRepository(
         }
     }
 
-    override suspend fun getProductsInCart(): List<Product> {
+    override suspend fun getProductsInCart(): List<CartProduct> {
         return withContext(Dispatchers.IO) {
-            mapper.mapList(api.getProductsInCart())
+            mapper.mapCartProducts(api.getProductsInCart())
         }
     }
 }

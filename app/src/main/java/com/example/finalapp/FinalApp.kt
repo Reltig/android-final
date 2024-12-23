@@ -1,6 +1,8 @@
 package com.example.finalapp
 
 import android.app.Application
+import com.example.finalapp.data.DataPreferences
+import com.example.finalapp.di.dbModule
 import com.example.finalapp.di.networkModule
 import com.example.finalapp.di.rootModule
 import com.github.terrakok.modo.ModoDevOptions
@@ -15,6 +17,7 @@ class FinalApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        DataPreferences.init(this)
 
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
         ModoDevOptions.onIllegalScreenModelStoreAccess = ModoDevOptions.ValidationFailedStrategy { throwable ->
@@ -27,7 +30,7 @@ class FinalApp : Application() {
         startKoin {
             androidLogger()
             androidContext(this@FinalApp)
-            modules(rootModule, networkModule)
+            modules(rootModule, networkModule, dbModule)
         }
     }
 }

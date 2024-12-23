@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.example.finalapp.model.Product
 import com.example.finalapp.viewModel.ShopViewModel
 import com.github.terrakok.modo.Screen
@@ -101,17 +102,13 @@ fun ProductListElement (
         .clickable { navigation?.forward(ProductScreen(product, { viewModel.addToCart(product.id)})) }
         .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier
-                .size(24.dp)
-                .background(Color.Unspecified, CircleShape)
-                .border(1.dp, Color.Black, CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = product.name, style = Typography.titleMedium)
-        }
+        AsyncImage(
+            modifier = Modifier.size(30.dp),
+            model = product.iconUrl,
+            contentDescription = "product description",
+        )
         Text(
-            text = product.description,
+            text = product.name,
             style = Typography.titleMedium,
             modifier = Modifier
                 .weight(1f)

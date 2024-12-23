@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.example.finalapp.model.CartProduct
 import com.example.finalapp.model.Product
 import com.example.finalapp.ui.theme.Typography
 import com.example.finalapp.viewModel.CartViewModel
@@ -54,37 +55,47 @@ class CartScreen(
         val viewModel = getKoin().get<CartViewModel>()
         val state = viewModel.viewState
 
-        Column(Modifier.fillMaxSize()) {
-            TopAppBar(title = {
-                Text(
-                    text = "TopText",
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable { throw Exception("Not implemented") })
-            })
-
-            val lazyColumnState = rememberSaveable(saver = LazyListState.Saver) {
-                LazyListState(
-                    0,
-                    0
-                )
-            }
-
-            state.error?.let {
-                Text(text = it)
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = null,
-                    Modifier.clickable { throw Exception("Not implemented") }
-                )
-            }
-
-            LazyColumn(
-                Modifier.fillMaxSize().padding(horizontal = 15.dp),
-                lazyColumnState
+        if (!state.isAuthentificated) {
+            Box(modifier = Modifier
+                .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                items(state.items) {
-                    CartListElement(it)
+                Text(text = "Not authentificated")
+            }
+        }
+        else {
+            Column(Modifier.fillMaxSize()) {
+                TopAppBar(title = {
+                    Text(
+                        text = "Cart",
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { throw Exception("Not implemented") })
+                })
+
+                val lazyColumnState = rememberSaveable(saver = LazyListState.Saver) {
+                    LazyListState(
+                        0,
+                        0
+                    )
+                }
+
+                state.error?.let {
+                    Text(text = it)
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = null,
+                        Modifier.clickable { throw Exception("Not implemented") }
+                    )
+                }
+
+                LazyColumn(
+                    Modifier.fillMaxSize().padding(horizontal = 15.dp),
+                    lazyColumnState
+                ) {
+                    items(state.items) {
+                        CartListElement(it)
+                    }
                 }
             }
         }
@@ -92,7 +103,7 @@ class CartScreen(
 }
 
 @Composable
-fun CartListElement(product: Product) {
+fun CartListElement(product: CartProduct) {
     Row(Modifier
         .fillMaxWidth()
         .padding(16.dp),
@@ -113,5 +124,6 @@ fun CartListElement(product: Product) {
                 .weight(1f)
                 .padding(start = 16.dp)
         )
+        Text(text = " Price: ${product.price} x ${product.count} = ${product.price * product.count}")
     }
 }

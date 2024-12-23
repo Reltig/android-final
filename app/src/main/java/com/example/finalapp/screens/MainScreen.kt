@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +32,7 @@ class MainScreen(
     private val navModel: MultiScreenNavModel = MultiScreenNavModel(
         ShopScreen(),
         CartScreen(),
+        FavouriteScreen(),
         ProfileScreen(),
         selected = 0
     )
@@ -100,5 +102,6 @@ enum class MainTabs(
 ) {
     SHOP(Icons.Default.Home, "Shop"),
     CART(Icons.Default.ShoppingCart, "Cart"),
+    FAVOURITE(Icons.Default.Star, "Favourite"),
     PROFILE(Icons.Default.AccountCircle, "Profile")
 }

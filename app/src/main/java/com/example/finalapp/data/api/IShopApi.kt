@@ -1,5 +1,6 @@
 package com.example.finalapp.data.api
 
+import com.example.finalapp.data.model.response.CartProductListResponse
 import com.example.finalapp.data.model.response.ProductListResponse
 import com.example.finalapp.data.model.response.ProductResponse
 import retrofit2.http.GET
@@ -22,5 +23,5 @@ interface IShopApi {
     )
 
     @GET("cart")
-    suspend fun getProductsInCart(): ProductListResponse
+    suspend fun getProductsInCart(): CartProductListResponse
 }
